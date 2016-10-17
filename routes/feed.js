@@ -12,7 +12,7 @@ router.get('/', function(req, res, next) {
 
     startDate = new Date(startDate);
     frequency = parseInt(frequency);
-    if (!startDate instanceof Date || isNaN(frequency)) {
+    if (!isValidDate(startDate) || isNaN(frequency)) {
         return res.status(400).send('Invalid parameters').end();
     }
 
@@ -20,5 +20,9 @@ router.get('/', function(req, res, next) {
     res.set('Content-Type', 'application/rss+xml');
     res.send(feed.xml({indent: true}));
 });
+
+function isValidDate(date) {
+    return date instanceof Date && !isNaN(date.getTime())
+}
 
 module.exports = router;

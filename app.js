@@ -12,9 +12,6 @@ var db = require('./lib/db');
 
 var app = express();
 
-// Create db if it doesn't exist
-db.createDbIfNotExist();
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');

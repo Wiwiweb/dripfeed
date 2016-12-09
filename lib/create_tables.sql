@@ -1,3 +1,26 @@
+-- Sequence: public.webcomics_id_seq
+
+CREATE SEQUENCE public.webcomics_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 1
+  CACHE 1;
+ALTER TABLE public.webcomics_id_seq
+  OWNER TO postgres;
+
+-- Sequence: public.pages_id_seq
+
+CREATE SEQUENCE public.pages_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 1
+  CACHE 1;
+ALTER TABLE public.pages_id_seq
+  OWNER TO postgres;
+
+
 -- Table: public.webcomics
 
 CREATE TABLE public.webcomics
@@ -12,11 +35,6 @@ WITH (
 );
 ALTER TABLE public.webcomics
   OWNER TO postgres;
-
--- Constraint: public.webcomic_id
-
-ALTER TABLE public.webcomics
-  ADD CONSTRAINT webcomic_id PRIMARY KEY(id);
 
 
 -- Table: public.pages
@@ -44,10 +62,3 @@ CREATE INDEX fki_webcomic_id
   ON public.pages
   USING btree
   (webcomic_id);
-
--- Constraint: public.page_id
-
--- ALTER TABLE public.pages DROP CONSTRAINT page_id;
-
-ALTER TABLE public.pages
-ADD CONSTRAINT page_id PRIMARY KEY(id);

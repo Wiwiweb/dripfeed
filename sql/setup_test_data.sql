@@ -8,10 +8,7 @@ VALUES ('XKCD', 'http://xkcd.com');
 
 
 INSERT INTO pages (page_nb, url, webcomic_id)
-VALUES ('0', 'http://xkcd.com/1/', (SELECT id from webcomics WHERE name='XKCD'));
-
-INSERT INTO pages (page_nb, url, webcomic_id)
-VALUES ('1', 'http://xkcd.com/2/', (SELECT id from webcomics WHERE name='XKCD'));
-
-INSERT INTO pages (page_nb, url, webcomic_id)
-VALUES ('2', 'http://xkcd.com/3/', (SELECT id from webcomics WHERE name='XKCD'));
+VALUES
+('0', 'http://xkcd.com/1/', (SELECT id from webcomics WHERE name='XKCD')),
+('1', 'http://xkcd.com/2/', (SELECT id from webcomics WHERE name='XKCD')),
+('2', 'http://xkcd.com/3/', (SELECT id from webcomics WHERE name='XKCD'));

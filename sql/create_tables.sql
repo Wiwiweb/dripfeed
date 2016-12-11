@@ -27,8 +27,8 @@ CREATE TABLE public.webcomics
 (
   id integer NOT NULL DEFAULT nextval('webcomics_id_seq'::regclass),
   name character varying,
-  main_url character varying,
   description character varying,
+  main_url character varying,
   CONSTRAINT webcomic_id PRIMARY KEY (id)
 )
 WITH (
@@ -44,8 +44,8 @@ CREATE TABLE public.pages
 (
   id integer NOT NULL DEFAULT nextval('pages_id_seq'::regclass),
   page_nb integer NOT NULL,
-  url character varying,
   title character varying,
+  url character varying,
   webcomic_id integer NOT NULL,
   CONSTRAINT page_id PRIMARY KEY (id),
   CONSTRAINT webcomic_id FOREIGN KEY (webcomic_id)

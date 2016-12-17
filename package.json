@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "env TESTING=true; tape **/*.spec.js | tap-diff"
+    "test": "tape **/*.spec.js | tap-diff"
   },
   "dependencies": {
     "body-parser": "~1.15.1",

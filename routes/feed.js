@@ -17,9 +17,13 @@ router.get('/', function(req, res, next) {
     }
 
     var rssGenerator = new RSSGenerator(0, startDate, frequency);
-    rssGenerator.createFeed().then(feed => {
+    rssGenerator.createFeed()
+    .then(feed => {
         res.set('Content-Type', 'application/rss+xml');
         res.send(feed.xml({indent: true}));
+    })
+    .catch(err => {
+        next(err);
     });
 });
 

@@ -9,8 +9,6 @@ var winston = require('winston');
 var routes = require('./routes/index');
 var feed = require('./routes/feed');
 
-var db = require('./lib/db');
-
 var app = express();
 
 // view engine setup

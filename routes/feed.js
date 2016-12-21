@@ -1,12 +1,12 @@
-var express = require('express');
-var router = express.Router();
+let express = require('express');
+let router = express.Router();
 
-var RSSGenerator = require('../lib/RSSGenerator');
+let RSSGenerator = require('../lib/RSSGenerator');
 
 router.get('/', function(req, res, next) {
-    var webcomicId = req.query.webcomicId;
-    var startDate = req.query.startDate;
-    var frequency = req.query.frequency;
+    let webcomicId = req.query.webcomicId;
+    let startDate = req.query.startDate;
+    let frequency = req.query.frequency;
     if (webcomicId == null || startDate == null || frequency == null) {
         return res.status(400).send('Missing parameters').end();
     }
@@ -18,7 +18,7 @@ router.get('/', function(req, res, next) {
         return res.status(400).send('Invalid parameters').end();
     }
 
-    var rssGenerator = new RSSGenerator(webcomicId, startDate, frequency);
+    let rssGenerator = new RSSGenerator(webcomicId, startDate, frequency);
     rssGenerator.createFeed()
     .then(feed => {
         res.set('Content-Type', 'application/rss+xml');

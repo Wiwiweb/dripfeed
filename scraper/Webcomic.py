@@ -1,4 +1,8 @@
 from abc import ABC, abstractmethod
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger()
 
 
 class Webcomic(ABC):
@@ -16,8 +20,9 @@ class Webcomic(ABC):
             self.current_page += 1
             self.current_url = next_page_url
         else:
-            # TODO error
-            pass
+            logger.debug("No followup to page {}".format(self.current_page))
+            self.current_page = 0
+            self.current_url = None
 
     @abstractmethod
     def get_next_page_url(self):

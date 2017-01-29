@@ -5,8 +5,8 @@ import psycopg2
 
 logger = logging.getLogger()
 
-db_url = os.environ['OPENSHIFT_POSTGRESQL_DB_URL']
-debug = os.environ['NODE_ENV']
+debug = os.getenv('NODE_ENV')
+db_url = os.getenv('OPENSHIFT_POSTGRESQL_DB_URL')
 if db_url is None:
     db_url = 'postgresql://postgres:postgres@127.0.0.1:5432'
 

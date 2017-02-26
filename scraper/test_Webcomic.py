@@ -5,6 +5,7 @@ from URLPatternWebcomic import URLPatternWebcomic
 
 class WebcomicTests(unittest.TestCase):
     def test_get_webcomic_id(self):
+        db.reload_fixtures()
         webcomic_name = "XKCD"
         self.assertTrue(webcomic_exists(webcomic_name), "Fixture error: webcomic doesn't exist")
 
@@ -13,6 +14,7 @@ class WebcomicTests(unittest.TestCase):
         self.assertIsNotNone(xkcd.webcomic_id)
 
     def test_create_webcomic_id(self):
+        db.reload_fixtures()
         webcomic_name = "Some Comic"
         self.assertFalse(webcomic_exists(webcomic_name), "Fixture error: webcomic already exists")
 
@@ -21,6 +23,7 @@ class WebcomicTests(unittest.TestCase):
         self.assertIsNotNone(some_comic.webcomic_id)
 
     def test_add_current_page_to_db(self):
+        db.reload_fixtures()
         xkcd = URLPatternWebcomic("XKCD", "https://xkcd.com/{}/")
         xkcd.current_page = 123
         xkcd.current_url = "https://xkcd.com/123/"

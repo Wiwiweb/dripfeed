@@ -1,28 +1,29 @@
 from abc import ABC, abstractmethod
-import os
 import logging
-import psycopg2
+import db
 
 logger = logging.getLogger()
 
-debug = os.getenv('NODE_ENV')
-db_url = os.getenv('OPENSHIFT_POSTGRESQL_DB_URL')
-if db_url is None:
-    db_url = 'postgresql://postgres:postgres@127.0.0.1:5432'
-
-if debug:
-    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s: %(message)s')
-    db_name = 'testing'
-else:
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s: %(message)s')
-    db_name = 'dripfeed'
-
 
 class Webcomic(ABC):
-    def __init__(self):
+    def __init__(self, name):
+        self.name = name
+        self.webcomic_id = self.get_or_create_webcomic_id()
         self.current_page = 0
         self.current_url = None
-        self.webcomic_id = 0  # TODO
+
+    def get_or_create_webcomic_id(self):
+        sql = "SELECT id FROM webcomics WHERE name=(%s)"
+        results = db.query(sql, [self.name])
+        if len(results) >= 1:
+            if len(results) > 1:
+                logger.warning("Multiple webcomics with the name " + self.name)
+            return results[0][0]
+        else:
+            logger.info("Created webcomic " + self.name)
+            sql = "INSERT INTO webcomics (name) VALUES ((%s)) RETURNING id"
+            results = db.query(sql, [self.name])
+            return results[0][0]
 
     def get_and_process_next_page(self):
         self.get_next_page_and_update_state()
@@ -44,9 +45,7 @@ class Webcomic(ABC):
         pass
 
     def add_current_page_to_db(self):
-        with psycopg2.connect("{}/{}".format(db_url, db_name)) as connection:
-            with connection.cursor() as cursor:
-                sql = "INSERT INTO webcomics (page_nb, url, title, webcomic_id)" + \
-                      "VALUES ((%s), (%s), (%s), (%s))"
-                values = [self.current_page, self.current_url, "", self.webcomic_id]
-                cursor.execute(sql, values)
+        sql = "INSERT INTO pages (page_nb, url, title, webcomic_id)" + \
+              "VALUES ((%s), (%s), (%s), (%s))"
+        values = [self.current_page, self.current_url, "", self.webcomic_id]
+        db.query(sql, values)

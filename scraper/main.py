@@ -3,7 +3,14 @@ from URLPatternWebcomic import URLPatternWebcomic
 
 
 def mcninja_next(soup):
-    return soup.find('a', class_='next')
+    next_link = soup.find('a', class_='next')
+    if next_link:
+        return next_link
+    else:
+        series_select = soup.find('select', id='series_select')
+        next_series = series_select.find('option', selected='selected').next
+        return next_series
+
 
 
 if __name__ == '__main__':

@@ -14,4 +14,4 @@ class NextPageLinkWebcomic(Webcomic):
             return self.first_page_url
         req = requests.get(self.current_url)
         soup = BeautifulSoup(req.text, "html.parser")
-        return self.next_page_link_finder_function(soup).get('href')
+        return self.next_page_link_finder_function(soup)

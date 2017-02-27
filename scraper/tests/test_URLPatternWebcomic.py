@@ -5,9 +5,8 @@ from URLPatternWebcomic import URLPatternWebcomic
 class URLPatternWebcomicTests(unittest.TestCase):
     def test_get_next_page(self):
         xkcd = URLPatternWebcomic("XKCD", "https://xkcd.com/{}/")
-
-        self.assertEqual(xkcd.current_page, 0)
-        self.assertIsNone(xkcd.current_url)
+        xkcd.current_page = 0
+        xkcd.current_url = None
 
         xkcd.get_next_page_and_update_state()
         self.assertEqual(xkcd.current_page, 1)

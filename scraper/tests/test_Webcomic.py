@@ -32,6 +32,25 @@ class WebcomicTests(unittest.TestCase):
         xkcd.add_current_page_to_db()
         self.assertTrue(page_exists(xkcd.webcomic_id, xkcd.current_page))
 
+    def test_get_last_page(self):
+        db.reload_fixtures()
+        xkcd = URLPatternWebcomic("XKCD", "https://xkcd.com/{}/")
+        self.assertTrue(page_exists(xkcd.webcomic_id, 5), "Fixture error: Page doesn't exist")
+
+        page_nb, url = xkcd.get_last_page()
+        self.assertEquals(page_nb, 5)
+        self.assertEquals(url, "https://xkcd.com/5/")
+
+    def test_get_last_page_no_pages(self):
+        db.reload_fixtures()
+        webcomic = URLPatternWebcomic("Test Webcomic", "")
+        self.assertFalse(page_exists(webcomic.webcomic_id, 1), "Fixture error: Page exists")
+
+        page_nb, url = webcomic.get_last_page()
+        self.assertEquals(page_nb, 0)
+        self.assertEquals(url, None)
+
+
 
 def webcomic_exists(name):
     sql = "SELECT id FROM webcomics WHERE name=(%s)"

@@ -9,8 +9,7 @@ class Webcomic(ABC):
     def __init__(self, name):
         self.name = name
         self.webcomic_id = self.get_or_create_webcomic_id()
-        self.current_page = 0
-        self.current_url = None
+        self.current_page, self.current_url = self.get_last_page()
 
     def get_or_create_webcomic_id(self):
         sql = "SELECT id FROM webcomics WHERE name=(%s)"
@@ -24,6 +23,16 @@ class Webcomic(ABC):
             sql = "INSERT INTO webcomics (name) VALUES ((%s)) RETURNING id"
             results = db.query(sql, [self.name])
             return results[0][0]
+
+    def get_last_page(self):
+        sql = "SELECT page_nb, url FROM pages " \
+              "WHERE webcomic_id=(%s)" \
+              "ORDER BY page_nb DESC LIMIT 1"
+        results = db.query(sql, [self.webcomic_id])
+        if results:
+            return results[0][0], results[0][1]
+        else:
+            return 0, None
 
     def get_and_process_next_page(self):
         self.get_next_page_and_update_state()

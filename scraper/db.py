@@ -7,11 +7,11 @@ db_url = os.getenv('OPENSHIFT_POSTGRESQL_DB_URL')
 if db_url is None:
     db_url = 'postgresql://postgres:postgres@127.0.0.1:5432'
 
-debug = os.getenv('NODE_ENV') == 'production'
+debug = os.getenv('NODE_ENV') != 'production'
 if debug:
-    db_name = 'dripfeed'
-else:
     db_name = 'testing'
+else:
+    db_name = 'dripfeed'
 
 
 def query(sql, values=None):

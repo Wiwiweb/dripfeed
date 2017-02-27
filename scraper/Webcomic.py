@@ -45,7 +45,7 @@ class Webcomic(ABC):
             self.current_page += 1
             self.current_url = next_page_url
         else:
-            logger.debug("No followup to page {}".format(self.current_page))
+            logger.debug("No followup to {} page {}".format(self.name, self.current_page))
             self.current_page = 0
             self.current_url = None
 
@@ -58,3 +58,4 @@ class Webcomic(ABC):
               "VALUES ((%s), (%s), (%s), (%s))"
         values = [self.current_page, self.current_url, "", self.webcomic_id]
         db.query(sql, values)
+        logger.info("Added {} page {}: {}".format(self.name, self.current_page, self.current_url))

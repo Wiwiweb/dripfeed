@@ -10,6 +10,10 @@ LOG_FILE = '../logs/scraper.log'
 debug = os.getenv('NODE_ENV') != 'production'
 logger = logging.getLogger()
 
+# Silence python-requests
+requests_log = logging.getLogger('requests')
+requests_log.setLevel(logging.WARN)
+
 if debug:
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG,
                         format='%(asctime)s: %(message)s')

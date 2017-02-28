@@ -1,0 +1,4 @@
+# Ignore everything except this very file
+# This lets us have the empty logs folder in the git repository
+*
+!.gitignore

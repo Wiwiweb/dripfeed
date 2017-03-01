@@ -1,3 +1,6 @@
+import requests
+from bs4 import BeautifulSoup
+
 from URLPatternWebcomic import URLPatternWebcomic
 from NextPageLinkWebcomic import NextPageLinkWebcomic
 
@@ -10,14 +13,14 @@ def get_all_webcomics():
 
 
 def mcninja_next(soup):
-    next_link = soup.find('a', class_='next')
+    next_link = soup.find('link', rel='next')
     if next_link:
-        return next_link.get('href')
-    else:
-        current_url = soup.find('link', rel='canonical').get('href')
-        page_nb = current_url.split('/')[-2]
-        series_nb = int(page_nb.split('p')[0])
-        if series_nb < 33:
-            return "http://drmcninja.com/archives/comic/{}p1/".format(series_nb+1)
+        next_url = next_link.get('href')
+        if '/archives/comic/' in next_url:
+            return next_url
         else:
-            return None
+            req = requests.get(next_url)
+            soup = BeautifulSoup(req.text, "html.parser")
+            return mcninja_next(soup)
+    else:
+        return None

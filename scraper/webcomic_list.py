@@ -1,12 +1,14 @@
 import requests
 from bs4 import BeautifulSoup
 
-from URLPatternWebcomic import URLPatternWebcomic
+from URLPatternWebcomicWithExceptions import URLPatternWebcomicWithExceptions
 from NextPageLinkWebcomic import NextPageLinkWebcomic
 
 
 def get_all_webcomics():
-    xkcd = URLPatternWebcomic("XKCD", "https://xkcd.com/{}/")
+    xkcd_exceptions = {"https://xkcd.com/403/": "https://xkcd.com/404/"}
+
+    xkcd = URLPatternWebcomicWithExceptions("XKCD", "https://xkcd.com/{}/", xkcd_exceptions)
     mcninja = NextPageLinkWebcomic("Dr. McNinja", "http://drmcninja.com/archives/comic/1p1/", mcninja_next)
 
     return [xkcd, mcninja]

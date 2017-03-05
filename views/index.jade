@@ -1,5 +1,22 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+    h1 Dripfeed
+
+    form(action ="/feed", method="get")
+        p hey #{timeNow}
+        p I want to read
+        select(name="webcomicId")
+            each webcomic in webcomics
+                option(value=webcomic.id) #{webcomic.name}
+        p Feed me a page every
+        select(name="frequency")
+            option(value=5) 5 seconds
+            option(value=60) minute
+            option(value=600) 10 minutes
+            option(value=1800) half-hour
+            option(value=3600) hour
+            option(value=3600 * 6) 6 hours
+            option(value=3600 * 24) day
+        input(type="hidden", name="startDate", value=timeNow)
+        input(type="submit", value="OK")

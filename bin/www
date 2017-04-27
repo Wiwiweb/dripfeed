@@ -68,5 +68,5 @@ function onListening() {
     let bind = typeof addr === 'string'
         ? 'pipe ' + addr
         : 'port ' + addr.port;
-    winston.debug('Listening on ' + bind);
+    winston.info('Listening on ' + bind);
 }

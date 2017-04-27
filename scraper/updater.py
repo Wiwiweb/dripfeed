@@ -5,7 +5,11 @@ import sys
 
 from webcomic_list import get_all_webcomics
 
-LOG_FILE = '../logs/scraper.log'
+log_dir = os.getenv('OPENSHIFT_LOG_DIR')
+if log_dir is None:
+    log_dir = '../logs/'
+log_file = log_dir + 'scraper.log'
+
 
 debug = os.getenv('NODE_ENV') != 'production'
 logger = logging.getLogger()
@@ -18,7 +22,7 @@ if debug:
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG,
                         format='%(asctime)s: %(message)s')
 else:
-    rotating_handler = RotatingFileHandler(LOG_FILE, maxBytes=1024000, backupCount=1)
+    rotating_handler = RotatingFileHandler(log_file, maxBytes=1024000, backupCount=1)
     rotating_handler.setFormatter(logging.Formatter('%(asctime)s: %(message)s'))
     rotating_handler.setLevel(logging.DEBUG)
     logger.setLevel(logging.DEBUG)

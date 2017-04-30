@@ -8,5 +8,5 @@ Dripfeed will let you follow webcomics archives as if they are currently ongoing
 * [X] Create node-js app that returns rss feeds from a URL but with bogus info
 * [X] Add database integration, but with manually entered db info
 * [X] Create python script that scrapes webcomic pages and feeds into the db
-* [ ] Create barebones home page
+* [X] Create barebones home page
 * [ ] Beautify home page

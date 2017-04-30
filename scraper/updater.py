@@ -5,6 +5,8 @@ import sys
 
 from webcomic_list import get_all_webcomics
 
+WEBCOMIC_LIST_FILE = 'webcomics.yaml'
+
 log_dir = os.getenv('OPENSHIFT_LOG_DIR')
 if log_dir is None:
     log_dir = '../logs/'
@@ -30,8 +32,8 @@ else:
 
 
 def update_all_webcomics():
-    webcomic_list = get_all_webcomics()
-    for webcomic in webcomic_list:
+    webcomics = get_all_webcomics(WEBCOMIC_LIST_FILE)
+    for webcomic_id, webcomic in webcomics.items():
         while True:
             webcomic.get_and_process_next_page()
             if webcomic.current_page == 0:

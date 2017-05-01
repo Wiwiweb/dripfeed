@@ -3,7 +3,7 @@ import requests
 import yaml
 from bs4 import BeautifulSoup
 
-from URLPatternWebcomicWithExceptions import URLPatternWebcomicWithExceptions
+from URLPatternWebcomic import URLPatternWebcomic
 from NextPageLinkWebcomic import NextPageLinkWebcomic
 
 logger = logging.getLogger()
@@ -17,7 +17,7 @@ def get_all_webcomics(filename):
             if content['type'] == 'url_pattern':
                 if 'exceptions' not in content:
                     content['exceptions'] = []
-                webcomic = URLPatternWebcomicWithExceptions(content['name'], content['pattern'], content['exceptions'])
+                webcomic = URLPatternWebcomic(content['name'], content['pattern'], content['exceptions'])
                 webcomic_dict[webcomic_id] = webcomic
             elif content['type'] == 'next_page_link':
                 next_method_name = webcomic_id + '_next'

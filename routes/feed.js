@@ -7,6 +7,7 @@ router.get('/', function(req, res, next) {
     let webcomicId = req.query.webcomicId;
     let startDate = req.query.startDate;
     let frequency = req.query.frequency;
+    let startPage = req.query.startPage;
     if (webcomicId == null || startDate == null || frequency == null) {
         return res.status(400).send('Missing parameters').end();
     }
@@ -14,11 +15,16 @@ router.get('/', function(req, res, next) {
     startDate = new Date(startDate);
     webcomicId = parseInt(webcomicId);
     frequency = parseInt(frequency);
-    if (!isValidDate(startDate) || isNaN(webcomicId) || isNaN(frequency)) {
+    if (startPage != null) {
+        startPage = parseInt(startPage);
+    } else {
+        startPage = undefined;
+    }
+    if (!isValidDate(startDate) || isNaN(webcomicId) || isNaN(frequency) || (startPage != undefined && startPage < 1)) {
         return res.status(400).send('Invalid parameters').end();
     }
 
-    let rssGenerator = new RSSGenerator(webcomicId, startDate, frequency);
+    let rssGenerator = new RSSGenerator(webcomicId, startDate, frequency, startPage);
     rssGenerator.createFeed()
     .then(feed => {
         res.set('Content-Type', 'application/rss+xml');

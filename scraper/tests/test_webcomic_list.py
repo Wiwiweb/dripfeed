@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 import webcomic_list
 from URLPatternWebcomic import URLPatternWebcomic
 from NextPageLinkWebcomic import NextPageLinkWebcomic
+from Webcomic import PageReturn
 
 
 class WebcomicListTests(unittest.TestCase):
@@ -26,15 +27,19 @@ class WebcomicListTests(unittest.TestCase):
         self.assertEquals(len(xkcd_no_exceptions.exception_dictionary), 0)
 
     def test_mcninja_next(self):
-        expected_results = {"http://drmcninja.com/archives/comic/5p52/": "http://drmcninja.com/archives/comic/7p1/",
-                            "http://drmcninja.com/archives/comic/11p16/": "http://drmcninja.com/archives/comic/11p17/",
-                            "http://drmcninja.com/archives/comic/11p56/": "http://drmcninja.com/archives/comic/12p1/",
-                            "http://drmcninja.com/archives/comic/33p147/": None}
+        expected_results = \
+            {"http://drmcninja.com/archives/comic/5p52/": PageReturn("http://drmcninja.com/archives/comic/7p1/",
+                                                                     "D.A.R.E To Resist Ninja Drugs and Ninja Violence Part 2 p52"),
+             "http://drmcninja.com/archives/comic/11p16/": PageReturn("http://drmcninja.com/archives/comic/11p17/",
+                                                                      "Punch Dracula p16"),
+             "http://drmcninja.com/archives/comic/11p56/": PageReturn("http://drmcninja.com/archives/comic/12p1/",
+                                                                      "Punch Dracula p56"),
+             "http://drmcninja.com/archives/comic/33p147/": PageReturn(None,
+                                                                       "The End: Part 2 p147")}
 
         for url in expected_results:
             req = requests.get(url)
             soup = BeautifulSoup(req.text, "html.parser")
-            result = webcomic_list.mcninja_next(soup)
+            result = webcomic_list.mcninja_info(soup)
             expected = expected_results[url]
-            self.assertEquals(result, expected)
-
+            self.assertEquals(result, expected, "Failed on " + url)

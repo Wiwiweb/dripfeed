@@ -1,9 +1,11 @@
 from abc import ABC, abstractmethod
+from collections import namedtuple
 import logging
 import db
 
 logger = logging.getLogger()
 
+PageReturn = namedtuple('PageReturn', ['next_url', 'title'])
 
 class Webcomic(ABC):
     def __init__(self, name, scraper_id):
@@ -11,6 +13,7 @@ class Webcomic(ABC):
         self.scraper_id = scraper_id
         self.webcomic_id = self.get_or_create_webcomic_id()
         self.current_page, self.current_url = self.get_last_page()
+        self.current_is_new_page = False
 
     def get_or_create_webcomic_id(self):
         sql = "SELECT id FROM webcomics WHERE scraper_id=(%s)"
@@ -35,28 +38,30 @@ class Webcomic(ABC):
         else:
             return 0, None
 
-    def get_and_process_next_page(self):
-        self.get_next_page_and_update_state()
-        if self.current_page > 0:
-            self.add_current_page_to_db()
+    # The main loop, called from updater.py
+    def process_current_page(self):
+        page_return = self.get_info_from_page()
+        if self.current_page > 0 and self.current_is_new_page:
+            self.add_current_page_to_db(page_return.title)
+        self.update_state(page_return.next_url)
 
-    def get_next_page_and_update_state(self):
-        next_page_url = self.get_next_page_url()
+    def update_state(self, next_page_url):
         if next_page_url is not None:
             self.current_page += 1
             self.current_url = next_page_url
+            self.current_is_new_page = True
         else:
             logger.debug("No followup to {} page {}".format(self.name, self.current_page))
             self.current_page = 0
             self.current_url = None
 
     @abstractmethod
-    def get_next_page_url(self):
+    def get_info_from_page(self):
         pass
 
-    def add_current_page_to_db(self):
-        sql = "INSERT INTO pages (page_nb, url, title, webcomic_id)" + \
+    def add_current_page_to_db(self, title=None):
+        sql = "INSERT INTO pages (page_nb, url, title, webcomic_id) " + \
               "VALUES ((%s), (%s), (%s), (%s))"
-        values = [self.current_page, self.current_url, "", self.webcomic_id]
+        values = [self.current_page, self.current_url, title, self.webcomic_id]
         db.query(sql, values)
         logger.info("Added {} page {}: {}".format(self.name, self.current_page, self.current_url))

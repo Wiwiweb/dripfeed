@@ -1,5 +1,5 @@
 import requests
-from Webcomic import Webcomic
+from Webcomic import Webcomic, PageReturn
 
 
 class URLPatternWebcomic(Webcomic):
@@ -11,12 +11,12 @@ class URLPatternWebcomic(Webcomic):
         else:
             self.exception_dictionary = exception_dictionary
 
-    def get_next_page_url(self):
+    def get_info_from_page(self):
         if self.current_url in self.exception_dictionary:
-            return self.exception_dictionary[self.current_url]
+            return PageReturn(self.exception_dictionary[self.current_url], self.current_url)
         next_url = self.url_pattern.format(self.current_page + 1)
         req = requests.get(next_url)
         if req.ok:
-            return next_url
+            return PageReturn(next_url, self.current_url)
         else:
-            return None
+            return PageReturn(None, self.current_url)

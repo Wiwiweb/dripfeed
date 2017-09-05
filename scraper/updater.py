@@ -35,7 +35,7 @@ def update_all_webcomics():
     webcomics = get_all_webcomics(WEBCOMIC_LIST_FILE)
     for webcomic_id, webcomic in webcomics.items():
         while True:
-            webcomic.get_and_process_next_page()
+            webcomic.process_current_page()
             if webcomic.current_page == 0:
                 break
 

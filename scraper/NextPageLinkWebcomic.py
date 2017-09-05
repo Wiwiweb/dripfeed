@@ -1,17 +1,17 @@
 import requests
 from bs4 import BeautifulSoup
-from Webcomic import Webcomic
+from Webcomic import Webcomic, PageReturn
 
 
 class NextPageLinkWebcomic(Webcomic):
-    def __init__(self, name, scraper_id, first_page_url, next_page_link_finder_function):
+    def __init__(self, name, scraper_id, first_page_url, page_info_function):
         super().__init__(name, scraper_id)
         self.first_page_url = first_page_url
-        self.next_page_link_finder_function = next_page_link_finder_function
+        self.page_info_function = page_info_function
 
-    def get_next_page_url(self):
+    def get_info_from_page(self):
         if self.current_page == 0:
-            return self.first_page_url
+            return PageReturn(self.first_page_url, None)
         req = requests.get(self.current_url)
         soup = BeautifulSoup(req.text, "html.parser")
-        return self.next_page_link_finder_function(soup)
+        return self.page_info_function(soup)

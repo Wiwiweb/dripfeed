@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 
 from URLPatternWebcomic import URLPatternWebcomic
 from NextPageLinkWebcomic import NextPageLinkWebcomic
+from Webcomic import PageReturn
 
 logger = logging.getLogger()
 
@@ -20,10 +21,11 @@ def get_all_webcomics(filename):
                 webcomic = URLPatternWebcomic(content['name'], scraper_id, content['pattern'], content['exceptions'])
                 webcomic_dict[scraper_id] = webcomic
             elif content['type'] == 'next_page_link':
-                next_method_name = scraper_id + '_next'
+                next_method_name = scraper_id + '_info'
                 if next_method_name not in globals():
-                    logger.warning("next_page_link type '{0}' doesn't have a next method! "
-                                   "You must create a {0}_next method in the webcomic_list.py file".format(scraper_id))
+                    logger.warning("next_page_link type '{0}' doesn't have an info method! "
+                                   "You must create a {0}_info method in the webcomic_list.py file, "
+                                   "returning at least the next url".format(scraper_id))
                     continue
                 next_method = globals()[next_method_name]
                 webcomic = NextPageLinkWebcomic(content['name'], scraper_id, content['first_page'], next_method)
@@ -33,15 +35,23 @@ def get_all_webcomics(filename):
     return webcomic_dict
 
 
-def mcninja_next(soup):
+def mcninja_info(soup, current_title=None):
+    if current_title is None:
+        current_series = soup.find('select', id='series_select').find('option', selected=True).string
+        current_page = soup.find('select', id='page_select').find('option', selected=True).string
+        current_title = '{} p{}'.format(current_series, current_page)
+
     next_link = soup.find('link', rel='next')
     if next_link:
         next_url = next_link.get('href')
         if '/archives/comic/' in next_url:
-            return next_url
+            # We found the next page
+            return PageReturn(next_url, current_title)
         else:
+            # This next url is just a news post, fetch it recursively to find the real next comic page
             req = requests.get(next_url)
             soup = BeautifulSoup(req.text, "html.parser")
-            return mcninja_next(soup)
+            return mcninja_info(soup, current_title)
     else:
-        return None
+        # The last page
+        return PageReturn(None, current_title)

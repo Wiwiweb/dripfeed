@@ -1,0 +1,28 @@
+---
+
+xkcd:
+  name: XKCD
+  type: url_pattern
+  pattern: https://xkcd.com/{}/
+  exceptions:
+  - from: https://xkcd.com/403/
+    to: https://xkcd.com/404/
+
+pattern_no_exceptions:
+  name: XKCD
+  type: url_pattern
+  pattern: https://xkcd.com/{}/
+
+mcninja:
+  name: Dr. McNinja
+  type: next_page_link
+  first_page: http://drmcninja.com/archives/comic/1p1/
+
+no_next_method:
+  name: Dr. McNinja
+  type: next_page_link
+  first_page: http://drmcninja.com/archives/comic/1p1/
+
+bad_type:
+  name: badtype
+  type: badtype

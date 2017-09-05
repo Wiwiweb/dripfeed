@@ -3,8 +3,8 @@ from Webcomic import Webcomic
 
 
 class URLPatternWebcomic(Webcomic):
-    def __init__(self, name, url_pattern, exception_dictionary=None):
-        super().__init__(name)
+    def __init__(self, name, scraper_id, url_pattern, exception_dictionary=None):
+        super().__init__(name, scraper_id)
         self.url_pattern = url_pattern
         if exception_dictionary is None:
             self.exception_dictionary = {}

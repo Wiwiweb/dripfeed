@@ -1,10 +1,11 @@
 TRUNCATE webcomics, pages;
 
-INSERT INTO webcomics (name, main_url, description)
-VALUES ('Test Webcomic', 'http://testwebcomic.com', 'A test webcomic');
+-- scraper_id corresponds to the webcomics.yaml hash key
+INSERT INTO webcomics (name, main_url, description, scraper_id)
+VALUES ('Test Webcomic', 'http://testwebcomic.com', 'A test webcomic', 'test');
 
-INSERT INTO webcomics (name, main_url, description)
-VALUES ('XKCD', 'http://xkcd.com', 'A webcomic of romance, sarcasm, math, and language.');
+INSERT INTO webcomics (name, main_url, description, scraper_id)
+VALUES ('XKCD', 'http://xkcd.com', 'A webcomic of romance, sarcasm, math, and language.', 'xkcd');
 
 
 INSERT INTO pages (page_nb, url, title, webcomic_id)

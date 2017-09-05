@@ -6,22 +6,23 @@ logger = logging.getLogger()
 
 
 class Webcomic(ABC):
-    def __init__(self, name):
+    def __init__(self, name, scraper_id):
         self.name = name
+        self.scraper_id = scraper_id
         self.webcomic_id = self.get_or_create_webcomic_id()
         self.current_page, self.current_url = self.get_last_page()
 
     def get_or_create_webcomic_id(self):
-        sql = "SELECT id FROM webcomics WHERE name=(%s)"
-        results = db.query(sql, [self.name])
+        sql = "SELECT id FROM webcomics WHERE scraper_id=(%s)"
+        results = db.query(sql, [self.scraper_id])
         if len(results) >= 1:
             if len(results) > 1:
-                logger.warning("Multiple webcomics with the name " + self.name)
+                logger.warning("Multiple webcomics with the scraper id " + self.name)
             return results[0][0]
         else:
-            logger.info("Created webcomic " + self.name)
-            sql = "INSERT INTO webcomics (name) VALUES ((%s)) RETURNING id"
-            results = db.query(sql, [self.name])
+            logger.info("Created webcomic " + self.name + " with scraper id " + self.scraper_id)
+            sql = "INSERT INTO webcomics (name, scraper_id) VALUES (%s, %s) RETURNING id"
+            results = db.query(sql, [self.name, self.scraper_id])
             return results[0][0]
 
     def get_last_page(self):

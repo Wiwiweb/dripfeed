@@ -4,8 +4,8 @@ from Webcomic import Webcomic
 
 
 class NextPageLinkWebcomic(Webcomic):
-    def __init__(self, name, first_page_url, next_page_link_finder_function):
-        super().__init__(name)
+    def __init__(self, name, scraper_id, first_page_url, next_page_link_finder_function):
+        super().__init__(name, scraper_id)
         self.first_page_url = first_page_url
         self.next_page_link_finder_function = next_page_link_finder_function
 

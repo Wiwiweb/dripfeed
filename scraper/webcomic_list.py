@@ -13,23 +13,23 @@ def get_all_webcomics(filename):
     webcomic_dict = {}
     with open(filename, 'r') as file:
         webcomics = yaml.load(file)
-        for webcomic_id, content in webcomics.items():
+        for scraper_id, content in webcomics.items():
             if content['type'] == 'url_pattern':
                 if 'exceptions' not in content:
                     content['exceptions'] = []
-                webcomic = URLPatternWebcomic(content['name'], content['pattern'], content['exceptions'])
-                webcomic_dict[webcomic_id] = webcomic
+                webcomic = URLPatternWebcomic(content['name'], scraper_id, content['pattern'], content['exceptions'])
+                webcomic_dict[scraper_id] = webcomic
             elif content['type'] == 'next_page_link':
-                next_method_name = webcomic_id + '_next'
+                next_method_name = scraper_id + '_next'
                 if next_method_name not in globals():
                     logger.warning("next_page_link type '{0}' doesn't have a next method! "
-                                   "You must create a {0}_next method in the webcomic_list.py file".format(webcomic_id))
+                                   "You must create a {0}_next method in the webcomic_list.py file".format(scraper_id))
                     continue
                 next_method = globals()[next_method_name]
-                webcomic = NextPageLinkWebcomic(content['name'], content['first_page'], next_method)
-                webcomic_dict[webcomic_id] = webcomic
+                webcomic = NextPageLinkWebcomic(content['name'], scraper_id, content['first_page'], next_method)
+                webcomic_dict[scraper_id] = webcomic
             else:
-                logger.warning("Invalid webcomic type! {}: {}".format(webcomic_id, content['type']))
+                logger.warning("Invalid webcomic type! {}: {}".format(scraper_id, content['type']))
     return webcomic_dict
 
 

@@ -7,7 +7,7 @@ class NextPageLinkTests(unittest.TestCase):
         def mcninja_next(soup):
             return soup.find('a', class_='next').get('href')
 
-        mcninja = NextPageLinkWebcomic("Dr. McNinja", "http://drmcninja.com/archives/comic/1p1/", mcninja_next)
+        mcninja = NextPageLinkWebcomic("Dr. McNinja", "mcninja", "http://drmcninja.com/archives/comic/1p1/", mcninja_next)
         mcninja.current_page = 0
         mcninja.current_url = None
 

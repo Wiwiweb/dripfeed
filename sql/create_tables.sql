@@ -29,6 +29,7 @@ CREATE TABLE public.webcomics
   name character varying,
   description character varying,
   main_url character varying,
+  scraper_id character varying NOT NULL,
   CONSTRAINT webcomic_id PRIMARY KEY (id)
 )
 WITH (

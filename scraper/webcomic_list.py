@@ -55,3 +55,24 @@ def mcninja_info(soup, current_title=None):
     else:
         # The last page
         return PageReturn(None, current_title)
+
+
+def cucumber_quest_info(soup):
+    current_title = soup.find('header', class_='post-header').find('h1').string
+    next_link_button = soup.find('a', class_='next-webcomic-link')
+    if 'current-webcomic' in next_link_button['class']:
+        next_link = None
+    else:
+        next_link = next_link_button.get('href')
+    return PageReturn(next_link, current_title)
+
+
+def smbc_info(soup):
+    trim_length = len("Saturday Morning Breakfast Cereal - ")
+    current_title = soup.find('title').string[trim_length:]
+    next_link_button = soup.find('a', class_='next')
+    if next_link_button is None:
+        next_link = None
+    else:
+        next_link = next_link_button.get('href')
+    return PageReturn(next_link, current_title)

@@ -12,3 +12,13 @@ mcninja:
   name: Dr. McNinja
   type: next_page_link
   first_page: http://drmcninja.com/archives/comic/1p1/
+
+cucumber_quest:
+  name: Cucumber Quest
+  type: next_page_link
+  first_page: http://cucumber.gigidigi.com/cq/page-1/
+
+smbc:
+  name: Saturday Morning Breakfast Cereal
+  type: next_page_link
+  first_page: https://www.smbc-comics.com/comic/2002-09-05
